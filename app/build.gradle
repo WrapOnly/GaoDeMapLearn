@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.tian.gaodemap"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('./certificate/gaode_debug.jks')
+            storePassword 'tiantan'
+            keyAlias 'gaodedebugkeysotre'
+            keyPassword 'tiantan'
+        }
+        release {
+            storeFile file('./certificate/gaode_release.jks')
+            storePassword 'tiantan'
+            keyAlias 'gaodekeystore'
+            keyPassword 'tiantan'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include('arm64-v8a', 'armeabi', 'x86', 'armeabi-v7a', 'mips')
+            universalApk true
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile project(':gaodemaplibrary')
+}
